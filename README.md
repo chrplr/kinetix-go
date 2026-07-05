@@ -1,5 +1,7 @@
 # Kinetix — Go port
 
+[![Latest release](https://img.shields.io/github/v/release/chrplr/kinetix-go)](https://github.com/chrplr/kinetix-go/releases/latest)
+
 A Go re-implementation of the Pygame Zero game **Kinetix** from *Code the Classics
 Volume 2* (Raspberry Pi Press), built on
 [go-sdl3](https://github.com/Zyko0/go-sdl3) and the
