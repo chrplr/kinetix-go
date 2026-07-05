@@ -39,7 +39,7 @@ func (c *KeyboardControls) getX() float64 {
 	return 0
 }
 
-func (c *KeyboardControls) fireDown() bool { return keySpace() }
+func (c *KeyboardControls) fireDown() bool { return keySpace() || keyEnter() }
 
 // AIControls drives the bat automatically for the title-screen demo.
 type AIControls struct {

@@ -32,6 +32,9 @@ var app *pgzgo.App
 func keyLeft() bool  { return app.Keyboard.Held(sdl.SCANCODE_LEFT) }
 func keyRight() bool { return app.Keyboard.Held(sdl.SCANCODE_RIGHT) }
 func keySpace() bool { return app.Keyboard.Held(sdl.SCANCODE_SPACE) }
+func keyEnter() bool {
+	return app.Keyboard.Held(sdl.SCANCODE_RETURN) || app.Keyboard.Held(sdl.SCANCODE_KP_ENTER)
+}
 
 // Gamepad bindings used by JoystickControls.
 func padLeft() bool     { return app.Gamepad.Left() }
