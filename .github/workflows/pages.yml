@@ -40,6 +40,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version-file: kinetix-go/go.mod
+          cache-dependency-path: kinetix-go/go.sum
 
       # Redirect go-sdl3 to the sibling fork for this build only. The replace is
       # never committed, so it can't affect native consumers of the module.
