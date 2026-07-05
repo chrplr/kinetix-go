@@ -11,6 +11,17 @@ are both supported.
 
 **▶ Play it in your browser: <https://chrplr.github.io/kinetix-go/>**
 
+## Download
+
+Prebuilt, self-contained binaries — no install, no dependencies, assets embedded.
+Grab the latest for your platform:
+
+- **Linux** (amd64) — [kinetix-linux-amd64.tar.gz](https://github.com/chrplr/kinetix-go/releases/latest/download/kinetix-linux-amd64.tar.gz)
+- **macOS** (Apple Silicon) — [kinetix-macos-arm64.tar.gz](https://github.com/chrplr/kinetix-go/releases/latest/download/kinetix-macos-arm64.tar.gz)
+- **Windows** (amd64) — [kinetix-windows-amd64.zip](https://github.com/chrplr/kinetix-go/releases/latest/download/kinetix-windows-amd64.zip)
+
+All versions are on the [releases page](https://github.com/chrplr/kinetix-go/releases).
+
 ## Run
 
 ```sh
