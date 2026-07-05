@@ -9,6 +9,8 @@ All images, sounds and music are embedded, so `go build` produces a single
 self-contained binary that needs no asset files at run time. Keyboard and gamepad
 are both supported.
 
+**▶ Play it in your browser: <https://chrplr.github.io/kinetix-go/>**
+
 ## Run
 
 ```sh
@@ -23,6 +25,40 @@ startup, so no system SDL install is needed.
 ```sh
 go run . -selftest   # steps the game logic without a window, then exits
 ```
+
+## WebAssembly (play in a browser)
+
+The same code compiles to WebAssembly and runs in a browser. Every push to `main`
+builds the wasm and deploys it to GitHub Pages via
+[`.github/workflows/pages.yml`](.github/workflows/pages.yml); the live demo is
+linked above.
+
+The browser build needs two things beyond a plain `GOOS=js GOARCH=wasm go build`:
+
+- **SDL3 compiled to Emscripten** plus a handful of js/wasm bindings that aren't in
+  upstream go-sdl3 yet. Both come from the
+  [go-sdl3-wasm](https://github.com/chrplr/go-sdl3-wasm) fork, which also ships a
+  `wasmsdl` tool that bundles the `sdl.js` + `sdl.wasm` runtime alongside the game.
+- **pgzgo v0.2.0+**, whose js/wasm path decodes images with Go's own `image/png`
+  and tracks the keyboard from events (there is no `SDL_GetKeyboardState` on js).
+
+The redirect to the fork is applied only inside the Pages workflow (via a
+`go mod edit -replace` that is never committed), so `go build` and `go get` keep
+using upstream go-sdl3 for native consumers. To build the browser bundle locally,
+with the fork checked out as a sibling directory:
+
+```sh
+# one directory up: git clone -b wasm-render-fixes https://github.com/chrplr/go-sdl3-wasm
+go mod edit -replace github.com/Zyko0/go-sdl3=../go-sdl3-wasm   # do not commit this
+(cd ../go-sdl3-wasm && go run ./cmd/wasmsdl serve -html "$OLDPWD/web/index.html" "$OLDPWD")
+go mod edit -dropreplace github.com/Zyko0/go-sdl3              # restore go.mod
+```
+
+Then open <http://localhost:8080>.
+
+Two caveats in the browser: **no audio** (SDL3_mixer's js bindings aren't
+implemented yet) and **keyboard-only** (no gamepad on js yet). Both degrade
+gracefully — the game runs, just silently.
 
 ## Ebitengine vs. go-sdl3 + pgzgo
 
