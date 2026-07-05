@@ -39,8 +39,9 @@ The browser build needs two things beyond a plain `GOOS=js GOARCH=wasm go build`
   upstream go-sdl3 yet. Both come from the
   [go-sdl3-wasm](https://github.com/chrplr/go-sdl3-wasm) fork, which also ships a
   `wasmsdl` tool that bundles the `sdl.js` + `sdl.wasm` runtime alongside the game.
-- **pgzgo v0.2.0+**, whose js/wasm path decodes images with Go's own `image/png`
-  and tracks the keyboard from events (there is no `SDL_GetKeyboardState` on js).
+- **pgzgo v0.3.0+**, whose js/wasm path decodes images with Go's own `image/png`,
+  tracks the keyboard from events (there is no `SDL_GetKeyboardState` on js), and
+  plays audio through SDL3_mixer's browser bindings.
 
 The redirect to the fork is applied only inside the Pages workflow (via a
 `go mod edit -replace` that is never committed), so `go build` and `go get` keep
@@ -56,9 +57,9 @@ go mod edit -dropreplace github.com/Zyko0/go-sdl3              # restore go.mod
 
 Then open <http://localhost:8080>.
 
-Two caveats in the browser: **no audio** (SDL3_mixer's js bindings aren't
-implemented yet) and **keyboard-only** (no gamepad on js yet). Both degrade
-gracefully — the game runs, just silently.
+One caveat in the browser: it's **keyboard-only** (no gamepad on js yet). Audio
+works — SDL's Emscripten Web Audio backend resumes on your first keypress, so title
+music is silent only until the game starts.
 
 ## Ebitengine vs. go-sdl3 + pgzgo
 
@@ -99,6 +100,8 @@ Two things this pair shows beyond the scorecard:
 Ported to Go from the Python original in *Code the Classics Volume 2*. The game
 design and original assets are © their respective authors / Raspberry Pi Press —
 add the appropriate license before redistributing.
+
+The original Python code and assets are in Raspberry Pi Press's [Code the Classics — Volume 2](https://github.com/raspberrypipress/Code-the-Classics-Vol2) repository.
 
 The Go source code of this port is distributed under the MIT License.
 
