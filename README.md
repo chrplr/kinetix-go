@@ -13,6 +13,8 @@ are both supported.
 
 **▶ Play it in your browser: <https://chrplr.github.io/kinetix-go/>**
 
+*The in-browser version runs at the correct speed on any monitor, including high-refresh (120/144 Hz) displays, since [pgzgo](https://github.com/chrplr/pgzgo) v0.4.0.*
+
 ## Download
 
 Prebuilt, self-contained binaries — no install, no dependencies, assets embedded.
