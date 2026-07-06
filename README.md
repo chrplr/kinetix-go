@@ -123,8 +123,7 @@ Two things this pair shows beyond the scorecard:
 ## Provenance & license
 
 Ported to Go from the Python original in *Code the Classics Volume 2*. The game
-design and original assets are © their respective authors / Raspberry Pi Press —
-add the appropriate license before redistributing.
+design and original assets are © their respective authors / Raspberry Pi Press.
 
 The original Python code and assets are in Raspberry Pi Press's [Code the Classics — Volume 2](https://github.com/raspberrypipress/Code-the-Classics-Vol2) repository.
 
