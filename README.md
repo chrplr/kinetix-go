@@ -53,38 +53,47 @@ go run . -selftest   # steps the game logic without a window, then exits
 
 ## WebAssembly (play in a browser)
 
-The same code compiles to WebAssembly and runs in a browser. Every push to `main`
-builds the wasm and deploys it to GitHub Pages via
-[`.github/workflows/pages.yml`](.github/workflows/pages.yml); the live demo is
-linked above.
+The game compiles to WebAssembly and runs in a browser using `web/index.html` as
+the page shell. Building it needs a patched SDL3 (compiled for the browser, plus a
+few js bindings not yet in upstream go-sdl3); these live in the
+[go-sdl3-wasm](https://github.com/chrplr/go-sdl3-wasm) fork, which also ships the
+`wasmsdl` tool that compiles the game and serves it alongside its `sdl.js` +
+`sdl.wasm` runtime.
 
-The browser build needs two things beyond a plain `GOOS=js GOARCH=wasm go build`:
+To build and run it locally:
 
-- **SDL3 compiled to Emscripten** plus a handful of js/wasm bindings that aren't in
-  upstream go-sdl3 yet. Both come from the
-  [go-sdl3-wasm](https://github.com/chrplr/go-sdl3-wasm) fork, which also ships a
-  `wasmsdl` tool that bundles the `sdl.js` + `sdl.wasm` runtime alongside the game.
-- **pgzgo v0.3.0+**, whose js/wasm path decodes images with Go's own `image/png`,
-  tracks the keyboard from events (there is no `SDL_GetKeyboardState` on js), and
-  plays audio through SDL3_mixer's browser bindings.
+1. **Get the fork**, as a sibling of this repo (one directory up):
 
-The redirect to the fork is applied only inside the Pages workflow (via a
-`go mod edit -replace` that is never committed), so `go build` and `go get` keep
-using upstream go-sdl3 for native consumers. To build the browser bundle locally,
-with the fork checked out as a sibling directory:
+   ```sh
+   git clone -b wasm-render-fixes https://github.com/chrplr/go-sdl3-wasm ../go-sdl3-wasm
+   ```
 
-```sh
-# one directory up: git clone -b wasm-render-fixes https://github.com/chrplr/go-sdl3-wasm
-go mod edit -replace github.com/Zyko0/go-sdl3=../go-sdl3-wasm   # do not commit this
-(cd ../go-sdl3-wasm && go run ./cmd/wasmsdl serve -html "$OLDPWD/web/index.html" "$OLDPWD")
-go mod edit -dropreplace github.com/Zyko0/go-sdl3              # restore go.mod
-```
+2. **Point the build at the fork.** From this repo's directory:
 
-Then open <http://localhost:8080>.
+   ```sh
+   go mod edit -replace github.com/Zyko0/go-sdl3=../go-sdl3-wasm
+   ```
 
-One caveat in the browser: it's **keyboard-only** (no gamepad on js yet). Audio
-works — SDL's Emscripten Web Audio backend resumes on your first keypress, so title
-music is silent only until the game starts.
+   (This is a local-only change — do not commit it. Step 4 undoes it.)
+
+3. **Build and serve** the browser bundle, using `web/index.html` as the page:
+
+   ```sh
+   (cd ../go-sdl3-wasm && go run ./cmd/wasmsdl serve -html "$OLDPWD/web/index.html" "$OLDPWD")
+   ```
+
+   Then open <http://localhost:8080>.
+
+4. **Restore `go.mod`** when you're done, so native builds keep using upstream
+   go-sdl3:
+
+   ```sh
+   go mod edit -dropreplace github.com/Zyko0/go-sdl3
+   ```
+
+In the browser the game is **keyboard-only** (no gamepad on js yet). Audio works,
+but SDL's Web Audio backend only resumes on your first keypress, so the title music
+stays silent until the game starts.
 
 ## Ebitengine vs. go-sdl3 + pgzgo
 
