@@ -8,12 +8,22 @@ Volume 2* (Raspberry Pi Press), built on
 [pgzgo](https://github.com/chrplr/pgzgo) harness.
 
 All images, sounds and music are embedded, so `go build` produces a single
-self-contained binary that needs no asset files at run time. Keyboard and gamepad
-are both supported.
+self-contained binary that needs no asset files at run time.
 
 **▶ Play it in your browser: <https://chrplr.github.io/kinetix-go/>**
 
 *The in-browser version runs at the correct speed on any monitor, including high-refresh (120/144 Hz) displays, since [pgzgo](https://github.com/chrplr/pgzgo) v0.4.0.*
+
+## Controls
+
+| Action | Keyboard | Gamepad |
+|--------|----------|---------|
+| Move bat | Left / Right | D-pad or left stick |
+| Launch / fire | Space or Enter | A |
+| Start  | Space / Enter | A |
+| Quit   | Esc | Start |
+
+Gamepad support is native-only; the in-browser build is keyboard-only.
 
 ## Download
 
