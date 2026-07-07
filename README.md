@@ -12,8 +12,6 @@ self-contained binary that needs no asset files at run time.
 
 **▶ Play it in your browser: <https://chrplr.github.io/kinetix-go/>**
 
-*The in-browser version runs at the correct speed on any monitor, including high-refresh (120/144 Hz) displays, since [pgzgo](https://github.com/chrplr/pgzgo) v0.4.0.*
-
 ## Controls
 
 | Action | Keyboard | Gamepad |
@@ -24,6 +22,10 @@ self-contained binary that needs no asset files at run time.
 | Quit   | Esc | Start |
 
 Gamepad support is native-only; the in-browser build is keyboard-only.
+
+The picture below shows which key each action uses. They're all arrow keys, `Space` and `Enter`, which sit in the same place on every keyboard layout.
+
+![Keyboard controls for Kinetix](keyboard.svg)
 
 ## Download
 
