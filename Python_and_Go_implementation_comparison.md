@@ -15,8 +15,8 @@ Kinetix is an *Arkanoid*/*Breakout* game: a bat, one or more balls with real
 vector physics, destructible/indestructible brick grids, falling powerups,
 bullets, and an exit portal. The Python original is ~1,200 lines in one file; the
 Go port is ~1,500 lines across 17 focused files. The extra volume is mostly
-explicit struct/interface declarations, per‑type slice filters, a small vector
-type, and the asset/sound plumbing that Pygame Zero hides.
+explicit struct/interface declarations, per-type slice filters, and a small vector
+type. The asset/sound/loop plumbing itself now lives in the pgzgo harness, not per game.
 
 ---
 
@@ -54,9 +54,9 @@ per‑pixel physics and bat‑bounce handling) and `Game.collide`/`(*Game).colli
 | Ball / Bat / Barrel / Bullet / Impact | those classes | `ball.go`, `bat.go`, `barrel.go`, `bullet.go`, `impact.go` |
 | Brick collision geometry | `brick_collide` | `brickcollide.go` |
 | Game (levels, collide, update, draw) | `Game` | `game.go` |
-| Assets | Pygame Zero `images`/`screen` | `assets.go` |
-| Audio | Pygame Zero `sounds`/`music` | `audio.go` |
-| Input | `keyboard.*` | `input.go` |
+| Assets | Pygame Zero `images`/`screen` | pgzgo `Screen` |
+| Audio | Pygame Zero `sounds`/`music` | pgzgo `Audio` |
+| Input | `keyboard.*` | pgzgo `Keyboard` |
 | State machine / entry point | `update`/`draw`/module code | `main.go` |
 
 ---
@@ -143,19 +143,19 @@ three directions evenly spread regardless of orientation.
 
 ---
 
-## 4. Framework substitution: Pygame Zero → go‑sdl3
+## 4. Framework: Pygame Zero → pgzgo (on go-sdl3)
 
-| Pygame Zero feature | Go / go‑sdl3 replacement |
+| Pygame Zero feature | pgzgo equivalent (over go-sdl3) |
 |---|---|
-| `Actor("name", pos, anchor)` auto‑loads `images/name.png` | `Assets.Texture(name)` lazily loads + caches `*sdl.Texture` |
-| `screen.blit(name, (x,y))` | `Assets.Blit` → `renderer.RenderTexture` |
+| `Actor("name", …)` auto-loads a PNG | `Screen.Texture` — pgzgo's lazily-cached texture |
+| `screen.blit(name, (x,y))` | `Screen.Blit` / `BlitCentred` |
 | `actor.width` (current sprite width) | `Actor.width(assets)` → live texture size |
 | anchor tuples resolved internally | `Anchor` struct + `offset(w,h)` (§7) |
-| `screen.surface.set_clip(rect)` | `Assets.SetClip` → `renderer.SetClipRect` |
-| `keyboard.left`, `keyboard.space` | `sdl.GetKeyboardState()` snapshot in `input.go` |
-| `sounds.hit_brick0.play()` via `getattr` | `Audio.PlaySound(name, count)` |
-| `music.play`/`music.stop` | `Audio.PlayMusic`/`StopMusic` (looping mixer track) |
-| the `update()`/`draw()` game loop | explicit `sdl.RunLoop` in `main.go` with a frame delay |
+| `screen.surface.set_clip(rect)` | `Screen.SetClip` (pgzgo) |
+| `keyboard.left`, `keyboard.space` | `app.Keyboard.Held(sc)` snapshot |
+| `sounds.foo.play()` via `getattr` | `Audio.PlaySound(name, count)` |
+| `music.play`/`music.stop` | `Audio.PlayMusic`/`StopMusic` |
+| the `update()`/`draw()` loop | `app.Loop(update, draw)` — pgzgo's fixed-step, FPS-capped loop |
 
 `actor.width` deserves a note: in Pygame Zero it is a **property** returning the
 current sprite's width, and Kinetix reads it constantly (bat boundaries, ball/bat
@@ -339,8 +339,7 @@ are all forced by the language or framework:
 - `hex()`/`int(s,16)` → small **hex digit helpers**;
 - the `game` global → an **explicit `*Game` parameter** everywhere except the
   demo AI, which keeps a package‑level reference as the original does;
-- Pygame Zero's implicit asset/sound/clip/loop machinery → **explicit go‑sdl3
-  plumbing**.
+- Pygame Zero's implicit asset/sound/clip/loop machinery → the **pgzgo harness**.
 
 Everything that affects how the game *plays* — the per‑pixel X‑then‑Y ball
 physics, the integer‑floored bat bounce vector, the speed‑up cadence, the brick
