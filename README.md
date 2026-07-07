@@ -27,6 +27,16 @@ The picture below shows which key each action uses. They're all arrow keys, `Spa
 
 ![Keyboard controls for Kinetix](keyboard.svg)
 
+## How to play
+
+**The goal.** It's a brick-breaker (Breakout / Arkanoid style). Bounce the ball off your bat to smash all the bricks in the level; clear them to advance to the next layout.
+
+**Keep the ball alive.** Slide the bat **Left** / **Right** along the bottom to keep the ball bouncing back up. Let the ball fall past the bat and — if it was your last one — you lose a **life**. Lose all your lives and it's game over.
+
+**Serving.** The ball starts stuck to your bat. Press the **launch/fire** key to serve it. That same key fires when you're holding the gun power-up.
+
+**Power-ups.** Some bricks drop falling capsules — catch them with your bat for effects like a **wider bat**, a **gun**, **multi-ball**, **slower** or **faster** balls, a **magnet** that catches the ball, or an **extra life**. (A few are traps, such as a shrunken bat, so grab with care.)
+
 ## Download
 
 Prebuilt, self-contained binaries — no install, no dependencies, assets embedded.
